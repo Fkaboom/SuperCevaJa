@@ -21,13 +21,9 @@ public class UserService {
     }
 
     public UserModel createUser(UserModel userModel) {
-
         UserModel createdUserModel = userRepository.save(userModel);
-
         return createdUserModel;
     }
-
-
 
     public List<UserModel> findAll() {
         return userRepository.findAll();
@@ -41,7 +37,13 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id);
         }
     }
-    public void deleteUser(Long id){
-        this.userRepository.deleteById(id);
+    public void deleteUser(String login){
+        UserModel user = this.userRepository.findByLogin(login);
+        this.userRepository.delete(user);
+    }
+
+    public UserModel updateUser(UserModel userModel) {
+        UserModel updatedUserModel = this.userRepository.save(userModel);
+        return updatedUserModel;
     }
 }
