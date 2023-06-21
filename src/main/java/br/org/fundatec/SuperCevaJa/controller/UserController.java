@@ -28,18 +28,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserModel);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserModel> updateUser(@PathVariable ("id") Long id, @RequestBody UserModel userModel) {
+
+        UserModel updateModel = userService.updateUser(id, userModel);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(updateModel);
+
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<UserModel> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(this.userService.findById(id));
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<UserModel> updateUser(@PathVariable ("id") Long id, @RequestBody UserModel userModel) {
-//        UserModel updateModel = userService.findById(id);
-//        updateModel = userService.updateUser(userModel);
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(updateModel);
-//
-//    }
 
     @GetMapping
     public ResponseEntity<List<UserModel>> findAll() {

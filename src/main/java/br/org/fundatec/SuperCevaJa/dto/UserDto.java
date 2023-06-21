@@ -3,6 +3,9 @@ package br.org.fundatec.SuperCevaJa.dto;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 public class UserDto {
@@ -15,7 +18,17 @@ public class UserDto {
     private String name;
 
     @Column
-    private String subname;
+    private String surname;
+
+    @Column
+    private String cpf;
+
+    @Column
+    private String login;
+
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
+
 
 
 }

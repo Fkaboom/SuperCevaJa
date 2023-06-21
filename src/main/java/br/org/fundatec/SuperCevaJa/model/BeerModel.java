@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -19,6 +20,8 @@ public class BeerModel {
     @Column
     private BigDecimal price;
 
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
 
 
 }

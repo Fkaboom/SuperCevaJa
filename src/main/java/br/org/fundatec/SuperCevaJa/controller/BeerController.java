@@ -22,9 +22,17 @@ public class BeerController {
 
 
     @PostMapping
-    public ResponseEntity<BeerModel> createBeer(@RequestBody BeerModel beerModel){
+    public ResponseEntity<BeerModel> createBeer(@RequestBody BeerModel beerModel) {
         BeerModel createdBeerModel = beerService.createBeer(beerModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBeerModel);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BeerModel> updateBeer(@PathVariable ("id") Long id, @RequestBody BeerModel beerModel) {
+        BeerModel updateModel = beerService.findById(id);
+        updateModel = beerService.updateBeer(beerModel);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(updateModel);
+
     }
 
     @GetMapping("/{id}")
@@ -40,6 +48,9 @@ public class BeerController {
 
     //EXCLUSAO LOGICA
     @DeleteMapping("/{name}")
-    public void deleteBeer(@PathVariable("name") String name){this.beerService.deleteBeer(name);}
+    public void deleteBeer(@PathVariable("name") String name) {
+        this.beerService.deleteBeer(name);
+    }
+
 
 }

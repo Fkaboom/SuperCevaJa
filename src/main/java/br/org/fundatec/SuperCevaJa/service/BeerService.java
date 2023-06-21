@@ -35,4 +35,9 @@ public class BeerService {
     public void deleteBeer(String name) {
         this.beerRepository.deleteByName(name);
     }
+
+    public BeerModel updateBeer(BeerModel beerModel) {
+        BeerModel updatedBeerModel = this.beerRepository.save(beerModel);
+        return updatedBeerModel;
+    }
 }

@@ -2,6 +2,7 @@ package br.org.fundatec.SuperCevaJa.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -29,6 +30,9 @@ public class UserModel {
 
     @Column
     private String password;
+
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
 
 
 }
