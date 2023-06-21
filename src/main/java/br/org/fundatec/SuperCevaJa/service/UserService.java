@@ -47,6 +47,8 @@ public class UserService {
         this.userRepository.delete(user);
     }
 
+
+    ///ADJUST PUT
     public UserModel updateUser(Long id, UserModel userModel) {
         UserModel updateModel = findById(id);
         updateModel = this.userRepository.save(userModel);
