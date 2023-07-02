@@ -26,8 +26,7 @@ public class UserDto {
     @Column
     private String login;
 
-    @Column(nullable = true)
-    private LocalDateTime deletedAt;
+
 
 
 

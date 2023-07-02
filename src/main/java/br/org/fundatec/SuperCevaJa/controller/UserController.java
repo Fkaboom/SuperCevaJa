@@ -1,5 +1,6 @@
 package br.org.fundatec.SuperCevaJa.controller;
 
+import br.org.fundatec.SuperCevaJa.dto.UserDto;
 import br.org.fundatec.SuperCevaJa.model.UserModel;
 import br.org.fundatec.SuperCevaJa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,28 +29,28 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserModel);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserModel> updateUser(@PathVariable ("id") Long id, @RequestBody UserModel userModel) {
-
-        UserModel updateModel = userService.updateUser(id, userModel);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(updateModel);
-
-    }
-
-
     @GetMapping("/{id}")
-    public ResponseEntity<UserModel> findById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.userService.findById(id));
+    public ResponseEntity<UserDto> findById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(this.userService.findByIdDto(id));
     }
 
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> findAll() {
+    public ResponseEntity<List<UserDto>> findAll() {
         return ResponseEntity.ok(this.userService.findAll());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable ("id") Long id, String name, String surname) {
+
+        UserModel updateModel = userService.updateUser(id, name,surname);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
+
     @DeleteMapping("/{login}")
-    public void deleteUser(@PathVariable("login") String login) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("login") String login) {
         this.userService.deleteUser(login);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

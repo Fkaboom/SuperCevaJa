@@ -1,19 +1,20 @@
 package br.org.fundatec.SuperCevaJa.service;
 
+import br.org.fundatec.SuperCevaJa.dto.UserDto;
 import br.org.fundatec.SuperCevaJa.model.UserModel;
 import br.org.fundatec.SuperCevaJa.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private UserRepository userRepository;
-
-
 
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -23,35 +24,75 @@ public class UserService {
         Optional<UserModel> existingUser = Optional.ofNullable(userRepository.findByLogin(userModel.getLogin()));
 
         if (existingUser.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists with login: " + userModel.getLogin());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User already exists with login: " + userModel.getLogin());
         }
 
         UserModel createdUserModel = userRepository.save(userModel);
         return createdUserModel;
     }
 
-    public List<UserModel> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        List <UserModel> userModel = userRepository.findAll();
+
+        List<UserDto> activeUser = userModel.stream()
+                .filter(user -> user.getDeletedAt() == null).map(this::convertToDto)
+                .collect(Collectors.toList());
+
+        return activeUser;
     }
 
-    public UserModel findById(Long id) {
+
+    // PRECISAMOS CONCERTAR MUITA COISA AQUI -> FndById, ta dando nulo (name, surname)
+    // tbm, baahh eu só quero dormir
+    public UserModel updateUser(Long id, String name, String surname){
+        Optional<UserModel> updatedUser = Optional.ofNullable(findByIdModel(id));
+        updatedUser.get().setName(name);
+        updatedUser.get().setSurname(surname);
+        this.userRepository.save(updatedUser.get());
+        return updatedUser.get();
+
+    }
+
+    public void deleteUser(String login){
+        Optional<UserModel> existingUser = Optional.ofNullable(userRepository.findByLogin(login));
+        if (!existingUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found with login: " + login);
+        }
+            UserModel deletedUser = existingUser.get();
+            deletedUser.setDeletedAt(LocalDateTime.now());
+            this.userRepository.save(deletedUser);
+
+    }
+
+    public UserDto findByIdDto(Long id) {
         Optional<UserModel> userModel = userRepository.findById(id);
-        if (userModel.isPresent()){
+
+        if (userModel.isPresent() && userModel.get().getDeletedAt() == null){
+            UserDto userDto = convertToDto(userModel.get());
+            return userDto;
+        } else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id);
+        }
+    }
+
+    public UserModel findByIdModel(Long id) {
+        Optional<UserModel> userModel = userRepository.findById(id);
+
+        if (userModel.isPresent() && userModel.get().getDeletedAt() == null){
             return userModel.get();
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id);
         }
     }
-    public void deleteUser(String login){
-        UserModel user = this.userRepository.findByLogin(login);
-        this.userRepository.delete(user);
-    }
 
-
-    ///ADJUST PUT
-    public UserModel updateUser(Long id, UserModel userModel) {
-        UserModel updateModel = findById(id);
-        updateModel = this.userRepository.save(userModel);
-        return updateModel;
+    private UserDto convertToDto(UserModel userModel) {
+        UserDto userDto = new UserDto();
+        userDto.setId(userModel.getId());
+        userDto.setName(userModel.getName());
+        userDto.setSurname(userModel.getSurname());
+        userDto.setCpf(userModel.getCpf());
+        userDto.setLogin(userModel.getLogin());
+        return userDto;
     }
 }
