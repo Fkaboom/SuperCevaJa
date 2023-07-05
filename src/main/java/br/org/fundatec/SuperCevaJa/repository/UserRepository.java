@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserModel,Long> {
     UserModel findByLogin(String login);
-//    Optional<UserModel> findByIdModel(Long id);
+
 }

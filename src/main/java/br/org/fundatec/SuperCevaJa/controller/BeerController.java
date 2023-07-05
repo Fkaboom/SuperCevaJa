@@ -46,7 +46,6 @@ public class BeerController {
         return ResponseEntity.ok(this.beerService.findAll());
     }
 
-    //EXCLUSAO LOGICA
     @DeleteMapping("/{name}")
     public void deleteBeer(@PathVariable("name") String name) {
         this.beerService.deleteBeer(name);

@@ -3,6 +3,8 @@ server:
     context-path: /h2-database-poc
   port: 8081
 
+weather-external-api: https://api.weatherapi.com/v1/current.json?key=7b8fa6a32fab4e5aba7230804231605&q=
+
 spring:
   datasource:
     url: jdbc:h2:mem:pocdb

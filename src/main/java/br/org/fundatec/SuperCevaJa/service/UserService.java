@@ -42,15 +42,15 @@ public class UserService {
         return activeUser;
     }
 
-
-    // PRECISAMOS CONCERTAR MUITA COISA AQUI -> FndById, ta dando nulo (name, surname)
-    // tbm, baahh eu só quero dormir
     public UserModel updateUser(Long id, String name, String surname){
-        Optional<UserModel> updatedUser = Optional.ofNullable(findByIdModel(id));
-        updatedUser.get().setName(name);
-        updatedUser.get().setSurname(surname);
-        this.userRepository.save(updatedUser.get());
-        return updatedUser.get();
+        Optional<UserModel> foundUser = Optional.ofNullable(findByIdModel(id));
+        UserModel updatedUser = foundUser.get();
+
+        updatedUser.setName(name);
+        updatedUser.setSurname(surname);
+
+        this.userRepository.save(updatedUser);
+        return updatedUser;
 
     }
 
