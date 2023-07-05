@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-//Mudar 
+//Mudar de Model para CreateDTO
     @PostMapping
     //public ResponseEntity<String> createUser(@RequestBody UserRequestCreateDTO userRequestCreateDTO) {
     public ResponseEntity<String> createUser(@RequestBody UserModel userModel) {
@@ -43,6 +43,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.findAll());
     }
 
+    //Mudar de @RequestBody Map<String, String> requestBody para o updateDto
     @PutMapping("/{id}")
     //    public ResponseEntity<Void> updateUser(@PathVariable ("id") Long id, @RequestBody UserRequestUpdateDTO userRequestUpdateDTO) {
     public ResponseEntity<Void> updateUser(@PathVariable ("id") Long id, @RequestBody Map<String, String> requestBody) {
