@@ -1,4 +1,4 @@
-package br.org.fundatec.SuperCevaJa.dto;
+package br.org.fundatec.SuperCevaJa.dto.user;
 
 import jakarta.persistence.*;
 import lombok.Data;

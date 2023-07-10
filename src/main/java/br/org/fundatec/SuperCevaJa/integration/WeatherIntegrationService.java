@@ -18,14 +18,18 @@ public class WeatherIntegrationService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public WeatherResponse weatherResponse(String name){
-        String urlCompleta = this.uri + "/" +"name";
-        WeatherResponse weatherResponse = this.restTemplate.getForObject(urlCompleta, WeatherResponse.class);
+    public WeatherResponse findByName(String name) {
+        String urlComplete = this.uri + "=" + name;
+        WeatherResponse weatherResponse = this.restTemplate.getForObject(urlComplete, WeatherResponse.class);
+        returnTemp(weatherResponse);
         return weatherResponse;
     }
 
-    public double findWeather(){
-        return 2;
+
+
+    public double returnTemp(WeatherResponse weatherResponse){
+        double temp = weatherResponse.getTemp_c();
+        return temp;
     }
 
 

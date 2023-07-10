@@ -1,7 +1,8 @@
 package br.org.fundatec.SuperCevaJa.controller;
 
-import br.org.fundatec.SuperCevaJa.dto.UserDto;
-import br.org.fundatec.SuperCevaJa.model.UserModel;
+import br.org.fundatec.SuperCevaJa.dto.user.UserDTO;
+import br.org.fundatec.SuperCevaJa.dto.user.UserRequestCreateDTO;
+import br.org.fundatec.SuperCevaJa.dto.user.UserRequestUpdateDTO;
 import br.org.fundatec.SuperCevaJa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/cevaja/api/v1/user")
@@ -23,35 +23,28 @@ public class UserController {
         this.userService = userService;
     }
 
-//Mudar de Model para CreateDTO
     @PostMapping
-    //public ResponseEntity<String> createUser(@RequestBody UserRequestCreateDTO userRequestCreateDTO) {
-    public ResponseEntity<String> createUser(@RequestBody UserModel userModel) {
-        UserModel createdUserModel = userService.createUser(userModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User " + createdUserModel.getLogin()
+    public ResponseEntity<String> createUser(@RequestBody UserRequestCreateDTO userRequestCreateDTO) {
+        userService.createUser(userRequestCreateDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User " + userRequestCreateDTO.getLogin()
                 + " was created.");
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(this.userService.findByIdDto(id));
     }
 
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         return ResponseEntity.ok(this.userService.findAll());
     }
 
-    //Mudar de @RequestBody Map<String, String> requestBody para o updateDto
-    @PutMapping("/{id}")
-    //    public ResponseEntity<Void> updateUser(@PathVariable ("id") Long id, @RequestBody UserRequestUpdateDTO userRequestUpdateDTO) {
-    public ResponseEntity<Void> updateUser(@PathVariable ("id") Long id, @RequestBody Map<String, String> requestBody) {
 
-        String name = requestBody.get("name");
-        String surname = requestBody.get("surname");
-
-        UserModel updateModel = userService.updateUser(id, name,surname);
+    @PutMapping
+    public ResponseEntity<Void> updateUser(@RequestBody UserRequestUpdateDTO userRequestUpdateDTO) {
+        userService.updateUser(userRequestUpdateDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }

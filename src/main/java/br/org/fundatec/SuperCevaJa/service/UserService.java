@@ -1,12 +1,13 @@
 package br.org.fundatec.SuperCevaJa.service;
 
-import br.org.fundatec.SuperCevaJa.dto.UserDto;
+import br.org.fundatec.SuperCevaJa.dto.user.UserDTO;
+import br.org.fundatec.SuperCevaJa.dto.user.UserRequestCreateDTO;
+import br.org.fundatec.SuperCevaJa.dto.user.UserRequestUpdateDTO;
 import br.org.fundatec.SuperCevaJa.model.UserModel;
 import br.org.fundatec.SuperCevaJa.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserModel createUser(UserModel userModel) {
+    public void createUser(UserRequestCreateDTO userRequestCreateDTO) {
+        UserModel userModel = convertToModel(userRequestCreateDTO);
         Optional<UserModel> existingUser = Optional.ofNullable(userRepository.findByLogin(userModel.getLogin()));
 
         if (existingUser.isPresent()) {
@@ -28,30 +30,29 @@ public class UserService {
                     "User already exists with login: " + userModel.getLogin());
         }
 
-        UserModel createdUserModel = userRepository.save(userModel);
-        return createdUserModel;
+        userRepository.save(userModel);
     }
 
-    public List<UserDto> findAll() {
+
+
+    public List<UserDTO> findAll() {
         List <UserModel> userModel = userRepository.findAll();
 
-        List<UserDto> activeUser = userModel.stream()
+        List<UserDTO> activeUser = userModel.stream()
                 .filter(user -> user.getDeletedAt() == null).map(this::convertToDto)
                 .collect(Collectors.toList());
 
         return activeUser;
     }
 
-    public UserModel updateUser(Long id, String name, String surname){
-        Optional<UserModel> foundUser = Optional.ofNullable(findByIdModel(id));
+    public void updateUser(UserRequestUpdateDTO userRequestUpdateDTO){
+        Optional<UserModel> foundUser = Optional.ofNullable(findByIdModel(userRequestUpdateDTO.getId()));
         UserModel updatedUser = foundUser.get();
 
-        updatedUser.setName(name);
-        updatedUser.setSurname(surname);
+        updatedUser.setName(userRequestUpdateDTO.getName());
+        updatedUser.setSurname(userRequestUpdateDTO.getSurname());
 
         this.userRepository.save(updatedUser);
-        return updatedUser;
-
     }
 
     public void deleteUser(String login){
@@ -65,11 +66,11 @@ public class UserService {
 
     }
 
-    public UserDto findByIdDto(Long id) {
+    public UserDTO findByIdDto(Long id) {
         Optional<UserModel> userModel = userRepository.findById(id);
 
         if (userModel.isPresent() && userModel.get().getDeletedAt() == null){
-            UserDto userDto = convertToDto(userModel.get());
+            UserDTO userDto = convertToDto(userModel.get());
             return userDto;
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id);
@@ -86,8 +87,20 @@ public class UserService {
         }
     }
 
-    private UserDto convertToDto(UserModel userModel) {
-        UserDto userDto = new UserDto();
+    private UserModel convertToModel(UserRequestCreateDTO userRequestCreateDTO) {
+        UserModel userModel = new UserModel();
+        userModel.setId(userRequestCreateDTO.getId());
+        userModel.setName(userRequestCreateDTO.getName());
+        userModel.setSurname(userRequestCreateDTO.getSurname());
+        userModel.setBirthDate(userRequestCreateDTO.getBirthDate());
+        userModel.setCpf(userRequestCreateDTO.getCpf());
+        userModel.setLogin(userRequestCreateDTO.getLogin());
+        userModel.setPassword(userRequestCreateDTO.getPassword());
+        return userModel;
+    }
+
+    private UserDTO convertToDto(UserModel userModel) {
+        UserDTO userDto = new UserDTO();
         userDto.setId(userModel.getId());
         userDto.setName(userModel.getName());
         userDto.setSurname(userModel.getSurname());

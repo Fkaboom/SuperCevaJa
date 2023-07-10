@@ -1,14 +1,11 @@
-package br.org.fundatec.SuperCevaJa.dto;
+package br.org.fundatec.SuperCevaJa.dto.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Data
 @Entity
-public class UserDto {
+public class UserDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -25,8 +22,6 @@ public class UserDto {
 
     @Column
     private String login;
-
-
 
 
 

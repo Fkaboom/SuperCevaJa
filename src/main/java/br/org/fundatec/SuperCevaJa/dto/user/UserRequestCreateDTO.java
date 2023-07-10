@@ -1,7 +1,9 @@
-package br.org.fundatec.SuperCevaJa.dto;
+package br.org.fundatec.SuperCevaJa.dto.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -18,8 +20,14 @@ public class UserRequestCreateDTO {
     private String surname;
 
     @Column
+    private LocalDate birthDate;
+
+    @Column
     private String cpf;
 
     @Column
     private String login;
+
+    @Column
+    private String password;
 }

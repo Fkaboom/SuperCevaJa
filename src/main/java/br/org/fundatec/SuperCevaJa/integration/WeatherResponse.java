@@ -8,5 +8,5 @@ import lombok.Data;
 public class WeatherResponse {
 
     private String name;
-    private Double temperature;
+    private Double temp_c;
 }
