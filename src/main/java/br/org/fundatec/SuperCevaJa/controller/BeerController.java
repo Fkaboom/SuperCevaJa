@@ -1,4 +1,4 @@
-package br.org.fundatec.SuperCevaJa.controller;
+//package br.org.fundatec.SuperCevaJa.controller;
 //
 //import br.org.fundatec.SuperCevaJa.dto.beer.BeerRequestCreateDTO;
 //import br.org.fundatec.SuperCevaJa.dto.user.UserDTO;
@@ -21,7 +21,7 @@ package br.org.fundatec.SuperCevaJa.controller;
 //    @PostMapping
 //    public ResponseEntity<String> createBeer(@RequestBody BeerRequestCreateDTO beerRequestCreateDTO) {
 //        beerService.createBeer(beerRequestCreateDTO);
-//        return ResponseEntity.status(HttpStatus.CREATED).body("User " + beerRequestCreateDTO.getLogin()
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Beer " + beerRequestCreateDTO.getLogin()
 //                + " was created.");
 //    }
 //
