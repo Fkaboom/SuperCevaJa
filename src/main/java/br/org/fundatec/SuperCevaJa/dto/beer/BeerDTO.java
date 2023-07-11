@@ -1,12 +1,12 @@
 package br.org.fundatec.SuperCevaJa.dto.beer;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
+@Data
+@Entity
 public class BeerDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

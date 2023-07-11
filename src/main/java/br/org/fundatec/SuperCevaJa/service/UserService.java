@@ -39,7 +39,7 @@ public class UserService {
         List <UserModel> userModel = userRepository.findAll();
 
         List<UserDTO> activeUser = userModel.stream()
-                .filter(user -> user.getDeletedAt() == null).map(this::convertToDto)
+                .filter(user -> user.getDeletedAt() == null).map(this::convertToDTO)
                 .collect(Collectors.toList());
 
         return activeUser;
@@ -70,7 +70,7 @@ public class UserService {
         Optional<UserModel> userModel = userRepository.findById(id);
 
         if (userModel.isPresent() && userModel.get().getDeletedAt() == null){
-            UserDTO userDto = convertToDto(userModel.get());
+            UserDTO userDto = convertToDTO(userModel.get());
             return userDto;
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id);
@@ -99,7 +99,7 @@ public class UserService {
         return userModel;
     }
 
-    private UserDTO convertToDto(UserModel userModel) {
+    private UserDTO convertToDTO(UserModel userModel) {
         UserDTO userDto = new UserDTO();
         userDto.setId(userModel.getId());
         userDto.setName(userModel.getName());
