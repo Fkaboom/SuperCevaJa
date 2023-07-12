@@ -1,13 +1,14 @@
-package br.org.fundatec.SuperCevaJa.dto.beer;
+package br.org.fundatec.SuperCevaJa.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class BeerDTO {
+public class BeerTypeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -18,4 +19,9 @@ public class BeerDTO {
 
     @Column
     private BigDecimal price;
+
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
+
+
 }

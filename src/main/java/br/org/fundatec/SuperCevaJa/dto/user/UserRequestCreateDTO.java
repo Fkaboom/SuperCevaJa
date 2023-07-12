@@ -1,33 +1,51 @@
 package br.org.fundatec.SuperCevaJa.dto.user;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.time.LocalDate;
 
-@Data
-@Entity
 public class UserRequestCreateDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @Column
     private String name;
 
-    @Column
     private String surname;
 
-    @Column
     private LocalDate birthDate;
 
-    @Column
     private String cpf;
 
-    @Column
     private String login;
 
-    @Column
     private String password;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+
+    public String getCpf() {
+        return cpf;
+    }
+
+
+
+    public String getLogin() {
+        return login;
+    }
+
+
+    public String getPassword() {
+        return password;
+    }
+
 }

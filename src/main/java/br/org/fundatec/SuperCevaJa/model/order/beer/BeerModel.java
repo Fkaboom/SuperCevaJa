@@ -1,10 +1,9 @@
-package br.org.fundatec.SuperCevaJa.model;
+package br.org.fundatec.SuperCevaJa.model.order.beer;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -15,13 +14,11 @@ public class BeerModel {
     private Long id;
 
     @Column
-    private String name;
+    private String username;
 
     @Column
-    private BigDecimal price;
+    private BigDecimal quantity;
 
-    @Column(nullable = true)
-    private LocalDateTime deletedAt;
-
-
+    @ManyToOne
+    private OrderModel orderModel;
 }

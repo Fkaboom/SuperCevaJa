@@ -89,7 +89,6 @@ public class UserService {
 
     private UserModel convertToModel(UserRequestCreateDTO userRequestCreateDTO) {
         UserModel userModel = new UserModel();
-        userModel.setId(userRequestCreateDTO.getId());
         userModel.setName(userRequestCreateDTO.getName());
         userModel.setSurname(userRequestCreateDTO.getSurname());
         userModel.setBirthDate(userRequestCreateDTO.getBirthDate());
@@ -101,7 +100,6 @@ public class UserService {
 
     private UserDTO convertToDTO(UserModel userModel) {
         UserDTO userDto = new UserDTO();
-        userDto.setId(userModel.getId());
         userDto.setName(userModel.getName());
         userDto.setSurname(userModel.getSurname());
         userDto.setCpf(userModel.getCpf());
