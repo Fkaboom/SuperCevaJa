@@ -12,6 +12,10 @@ public class UserRequestUpdateDTO {
     }
 
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -24,4 +28,7 @@ public class UserRequestUpdateDTO {
         return surname;
     }
 
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 }

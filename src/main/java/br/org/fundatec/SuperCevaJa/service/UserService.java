@@ -56,14 +56,18 @@ public class UserService {
     }
 
     public void deleteUser(String login){
+        UserModel deletedUser = getUserByLogin(login);
+        deletedUser.setDeletedAt(LocalDateTime.now());
+            this.userRepository.save(deletedUser);
+
+    }
+
+    public UserModel getUserByLogin(String login) {
         Optional<UserModel> existingUser = Optional.ofNullable(userRepository.findByLogin(login));
         if (!existingUser.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found with login: " + login);
         }
-            UserModel deletedUser = existingUser.get();
-            deletedUser.setDeletedAt(LocalDateTime.now());
-            this.userRepository.save(deletedUser);
-
+        return existingUser.get();
     }
 
     public UserDTO findByIdDto(Long id) {

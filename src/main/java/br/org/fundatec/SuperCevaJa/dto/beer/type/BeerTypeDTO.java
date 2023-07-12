@@ -21,7 +21,6 @@ public class BeerTypeDTO {
         return price;
     }
 
-
     public void setPrice(BigDecimal price) {
         this.price = price;
     }

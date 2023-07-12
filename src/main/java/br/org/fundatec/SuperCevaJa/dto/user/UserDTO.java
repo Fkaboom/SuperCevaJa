@@ -18,13 +18,24 @@ public class UserDTO {
         this.name = name;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getLogin() {
+        return login;
     }
 
     public void setLogin(String login) {

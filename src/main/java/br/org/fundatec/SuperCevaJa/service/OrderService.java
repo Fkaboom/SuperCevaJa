@@ -1,6 +1,8 @@
 package br.org.fundatec.SuperCevaJa.service;
 
 import br.org.fundatec.SuperCevaJa.dto.order.OrderDTO;
+import br.org.fundatec.SuperCevaJa.model.BeerTypeModel;
+import br.org.fundatec.SuperCevaJa.model.order.beer.BeerModel;
 import br.org.fundatec.SuperCevaJa.model.order.beer.OrderModel;
 import br.org.fundatec.SuperCevaJa.model.UserModel;
 import br.org.fundatec.SuperCevaJa.repository.UserRepository;
@@ -11,43 +13,32 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 @Service
 public class OrderService {
     private final UserService userService;
-    private UserRepository userRepository;
     private final BeerTypeService beerTypeService;
 
     public OrderService(UserService userService, UserRepository userRepository, BeerTypeService beerTypeService) {
         this.userService = userService;
-        this.userRepository = userRepository;
         this.beerTypeService = beerTypeService;
     }
 
-    //TERMINAR
     public BigDecimal addOrder(OrderDTO orderDTO) {
 
         OrderModel orderModel = convertToModel(orderDTO);
 
         underageUser(orderModel);
 
-        OrderModel orderDiscountsApplied = applyDiscounts(orderModel);
+        BigDecimal finalPrice = applyDiscounts(orderModel);
 
-        return BigDecimal.valueOf(10);
+        return finalPrice;
 
-    }
-
-    private OrderModel convertToModel(OrderDTO orderDTO) {
-        OrderModel orderModel = new OrderModel();
-
-        orderModel.setBeersOrder(orderDTO.getBeersOrder());
-        orderModel.setLogin(orderDTO.getLogin());
-
-       return orderModel;
     }
 
     private void underageUser(OrderModel orderModel){
-        UserModel userModel = userRepository.findByLogin(orderModel.getLogin());
+        UserModel userModel = userService.getUserByLogin(orderModel.getLogin());
 
         LocalDate currentDate = LocalDate.now();
 
@@ -60,8 +51,41 @@ public class OrderService {
     }
 
 
-// TERMINAR
-    private OrderModel applyDiscounts(OrderModel orderModel){
-    return orderModel;
+    //Adicionar Clima
+    private BigDecimal applyDiscounts(OrderModel orderModel){
+
+        BigDecimal totalPrice = calculateTotalPrice(orderModel);
+
+
+        if (orderModel.getBeersOrder().size() > 10){
+            totalPrice = totalPrice.
+                    subtract(totalPrice.multiply(BigDecimal.valueOf(0.1)));
+        }
+
+        return totalPrice;
+    }
+
+    private BigDecimal calculateTotalPrice(OrderModel orderModel) {
+        List<BeerModel> beersOrder = orderModel.getBeersOrder();
+
+        BigDecimal totalPrice = beersOrder.stream()
+                .map(beerModel -> {
+                    BeerTypeModel beerTypeModel = beerTypeService.findByName(beerModel.getNameType());
+                    BigDecimal price = beerTypeModel.getPrice();
+                    BigDecimal quantity = beerModel.getQuantity();
+                    return price.multiply(quantity);
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return totalPrice;
+    }
+
+    private OrderModel convertToModel(OrderDTO orderDTO) {
+        OrderModel orderModel = new OrderModel();
+
+        orderModel.setBeersOrder(orderDTO.getBeersOrder());
+        orderModel.setLogin(orderDTO.getLogin());
+
+        return orderModel;
     }
 }

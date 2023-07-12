@@ -14,7 +14,7 @@ public class BeerModel {
     private Long id;
 
     @Column
-    private String username;
+    private String nameType;
 
     @Column
     private BigDecimal quantity;

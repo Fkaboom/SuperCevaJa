@@ -3,6 +3,7 @@ package br.org.fundatec.SuperCevaJa.service;
 import br.org.fundatec.SuperCevaJa.dto.beer.type.BeerTypeDTO;
 import br.org.fundatec.SuperCevaJa.dto.beer.type.BeerTypeRequestUpdateDTO;
 import br.org.fundatec.SuperCevaJa.model.BeerTypeModel;
+import br.org.fundatec.SuperCevaJa.model.UserModel;
 import br.org.fundatec.SuperCevaJa.repository.BeerTypeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -86,4 +87,11 @@ public class BeerTypeService {
         return beerTypeDTO;
     }
 
+    public BeerTypeModel findByName(String nameType) {
+        Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(nameType));
+        if (!existingBeerType.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Beer type not found with name: " + nameType);
+        }
+        return existingBeerType.get();
+    }
 }

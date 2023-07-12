@@ -14,8 +14,15 @@ public class OrderDTO {
         return login;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public List<BeerModel> getBeersOrder() {
         return beersOrder;
     }
 
+    public void setBeersOrder(List<BeerModel> beersOrder) {
+        this.beersOrder = beersOrder;
+    }
 }

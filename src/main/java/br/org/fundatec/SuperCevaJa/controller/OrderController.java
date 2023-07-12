@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/cevaja/api/v1/pedidos")
+@RequestMapping("/cevaja/api/v1/order")
 public class OrderController {
 
     private final OrderService orderService;
