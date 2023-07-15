@@ -20,5 +20,6 @@ public class BeerModel {
     private BigDecimal quantity;
 
     @ManyToOne
+    @JoinColumn(name = "OrderModel_id")
     private OrderModel orderModel;
 }

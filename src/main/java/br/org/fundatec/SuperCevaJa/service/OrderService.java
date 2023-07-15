@@ -57,7 +57,8 @@ public class OrderService {
         BigDecimal totalPrice = calculateTotalPrice(orderModel);
 
 
-        if (orderModel.getBeersOrder().size() > 10){
+        //ARRUMAR TAMANHO LISTA DE PEDIDO (PRODUTOS QUANT.)
+        if (orderModel.getBeersOrder().size() >= 10){
             totalPrice = totalPrice.
                     subtract(totalPrice.multiply(BigDecimal.valueOf(0.1)));
         }

@@ -1,5 +1,6 @@
 package br.org.fundatec.SuperCevaJa.model.order.beer;
 
+import br.org.fundatec.SuperCevaJa.model.UserModel;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,5 +19,9 @@ public class OrderModel {
 
     @OneToMany(mappedBy = "orderModel", cascade = CascadeType.ALL)
     private List<BeerModel> beersOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "UserModel_id")
+    private UserModel userModel;
 
 }

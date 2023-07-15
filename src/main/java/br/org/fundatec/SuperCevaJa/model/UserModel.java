@@ -1,8 +1,11 @@
 package br.org.fundatec.SuperCevaJa.model;
+import br.org.fundatec.SuperCevaJa.model.order.beer.BeerModel;
+import br.org.fundatec.SuperCevaJa.model.order.beer.OrderModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -34,5 +37,8 @@ public class UserModel {
     @Column(nullable = true)
     private LocalDateTime deletedAt;
 
+    //AJUSATR O CODIGO
+    @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL)
+    private List<OrderModel> orderModels;
 
 }
