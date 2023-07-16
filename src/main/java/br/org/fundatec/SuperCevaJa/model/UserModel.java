@@ -37,8 +37,6 @@ public class UserModel {
     @Column(nullable = true)
     private LocalDateTime deletedAt;
 
-    //AJUSATR O CODIGO
-    @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL)
-    private List<OrderModel> orderModels;
+
 
 }

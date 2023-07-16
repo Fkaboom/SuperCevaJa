@@ -2,6 +2,7 @@ package br.org.fundatec.SuperCevaJa.controller;
 
 import br.org.fundatec.SuperCevaJa.dto.order.OrderDTO;
 import br.org.fundatec.SuperCevaJa.service.OrderService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public BigDecimal addOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<String> addOrder(@RequestBody OrderDTO orderDTO) {
         return orderService.addOrder(orderDTO);
     }
 }

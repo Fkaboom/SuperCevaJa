@@ -18,22 +18,26 @@ import java.util.stream.Collectors;
 public class BeerTypeService {
     private BeerTypeRepository beerTypeRepository;
 
-    public BeerTypeService(BeerTypeRepository beerTypeRepository){
+    public BeerTypeService(BeerTypeRepository beerTypeRepository) {
         this.beerTypeRepository = beerTypeRepository;
     }
+
     public void createBeerType(BeerTypeDTO beerTypeDTO) {
         BeerTypeModel beerTypeModel = convertToModel(beerTypeDTO);
         Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(beerTypeModel.getName()));
 
-        if (existingBeerType.isPresent()) {
+        boolean isPresent = existingBeerType.isPresent();
+
+        if (isPresent) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Cannot add repeated Beer Type: " + beerTypeModel.getName());
+                    "Cannot add repeated Beer Type " + beerTypeModel.getName());
         }
+
         beerTypeRepository.save(beerTypeModel);
     }
 
     public List<BeerTypeDTO> findAll() {
-        List <BeerTypeModel> beerTypeModel = beerTypeRepository.findAll();
+        List<BeerTypeModel> beerTypeModel = beerTypeRepository.findAll();
 
         List<BeerTypeDTO> activeBeerType = beerTypeModel.stream()
                 .filter(beer -> beer.getDeletedAt() == null).map(this::convertToDTO)
@@ -42,8 +46,36 @@ public class BeerTypeService {
         return activeBeerType;
     }
 
-    public void updateBeerType(BeerTypeRequestUpdateDTO beerTypeRequestUpdateDTO){
-        Optional<BeerTypeModel> foundBeerType = Optional.ofNullable(findByIdModel(beerTypeRequestUpdateDTO.getId()));
+    public BeerTypeModel findByName(String name) {
+        Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(name));
+
+        boolean isEmpty = existingBeerType.isEmpty();
+
+        if (isEmpty) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Beer type not found with name " + name);
+        }
+
+        return existingBeerType.get();
+
+    }
+
+    public BeerTypeModel findByIdModel(Long id) {
+        Optional<BeerTypeModel> beerTypeModel = beerTypeRepository.findById(id);
+
+        boolean isEmpty = beerTypeModel.isEmpty();
+        boolean isDeleted = beerTypeModel.get().getDeletedAt() != null;
+
+
+        if (isDeleted || isEmpty) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found with ID " + id);
+        }
+
+        return beerTypeModel.get();
+    }
+
+    public void updateBeerType(BeerTypeRequestUpdateDTO beerTypeRequestUpdateDTO) {
+        Long userId = beerTypeRequestUpdateDTO.getId();
+        Optional<BeerTypeModel> foundBeerType = Optional.ofNullable(findByIdModel(userId));
         BeerTypeModel updatedBeerType = foundBeerType.get();
 
         updatedBeerType.setPrice(beerTypeRequestUpdateDTO.getPrice());
@@ -51,26 +83,21 @@ public class BeerTypeService {
         this.beerTypeRepository.save(updatedBeerType);
     }
 
-    public void deleteBeerType(String name){
+    public void deleteBeerType(String name) {
         Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(name));
-        if (!existingBeerType.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Beer not found with login: " + name);
+
+        boolean isEmpty = existingBeerType.isEmpty();
+
+        if (isEmpty) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Beer Type not found with name " + name);
         }
+
         BeerTypeModel deletedBeerType = existingBeerType.get();
         deletedBeerType.setDeletedAt(LocalDateTime.now());
         this.beerTypeRepository.save(deletedBeerType);
 
     }
 
-    public BeerTypeModel findByIdModel(Long id) {
-        Optional<BeerTypeModel> beerTypeModel = beerTypeRepository.findById(id);
-
-        if (beerTypeModel.isPresent() && beerTypeModel.get().getDeletedAt() == null){
-            return beerTypeModel.get();
-        } else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found with ID: " + id);
-        }
-    }
     private BeerTypeModel convertToModel(BeerTypeDTO beerTypeDTO) {
         BeerTypeModel beerTypeModel = new BeerTypeModel();
         beerTypeModel.setName(beerTypeDTO.getName());
@@ -87,11 +114,4 @@ public class BeerTypeService {
         return beerTypeDTO;
     }
 
-    public BeerTypeModel findByName(String nameType) {
-        Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(nameType));
-        if (!existingBeerType.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Beer type not found with name: " + nameType);
-        }
-        return existingBeerType.get();
-    }
 }

@@ -15,13 +15,10 @@ public class OrderModel {
     private Long id;
 
     @Column
-    private String login;
+    private String userLogin;
 
     @OneToMany(mappedBy = "orderModel", cascade = CascadeType.ALL)
     private List<BeerModel> beersOrder;
 
-    @ManyToOne
-    @JoinColumn(name = "UserModel_id")
-    private UserModel userModel;
 
 }

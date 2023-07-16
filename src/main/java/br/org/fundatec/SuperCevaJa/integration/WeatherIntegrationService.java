@@ -5,6 +5,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
 
 @Service
 public class WeatherIntegrationService {
@@ -18,7 +20,7 @@ public class WeatherIntegrationService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public WeatherResponse findByName() {
+    public WeatherResponse findCity() {
         String urlComplete = this.uri;
         WeatherResponse weatherResponse = this.restTemplate.getForObject(urlComplete, WeatherResponse.class);
         returnTemp(weatherResponse);

@@ -23,9 +23,16 @@ public class BeerTypeController {
 
     @PostMapping
     public ResponseEntity<String> createBeerType(@RequestBody BeerTypeDTO beerTypeDTO) {
-        beerTypeService.createBeerType(beerTypeDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Beer " + beerTypeDTO.getName()
-                + " was created.");
+        try {
+            beerTypeService.createBeerType(beerTypeDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Beer " + beerTypeDTO.getName()
+                    + " was created.");
+        } catch (Exception e) {
+            System.err.println("Error checking Beer Type: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(e.getMessage());
+        }
+
     }
 
     @GetMapping
@@ -35,15 +42,28 @@ public class BeerTypeController {
 
 
     @PutMapping
-    public ResponseEntity<Void> updateBeerType(@RequestBody BeerTypeRequestUpdateDTO beerTypeRequestUpdateDTO) {
-        beerTypeService.updateBeerType(beerTypeRequestUpdateDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<String> updateBeerType(@RequestBody BeerTypeRequestUpdateDTO beerTypeRequestUpdateDTO) {
+
+        try {
+            beerTypeService.updateBeerType(beerTypeRequestUpdateDTO);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            System.err.println("Error checking beer type ID: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(e.getMessage());
+        }
 
     }
 
     @DeleteMapping("/{name}")
     public ResponseEntity<String> deleteBeerType(@PathVariable("name") String name) {
-        this.beerTypeService.deleteBeerType(name);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Beer " + name + " has been deleted.");
+        try {
+            this.beerTypeService.deleteBeerType(name);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Beer " + name + " has been deleted.");
+        } catch (Exception e) {
+            System.err.println("Error checking Beer Type: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(e.getMessage());
+        }
     }
 }

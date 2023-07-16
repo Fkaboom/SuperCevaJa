@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,14 +26,28 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UserRequestCreateDTO userRequestCreateDTO) {
-        userService.createUser(userRequestCreateDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User " + userRequestCreateDTO.getLogin()
-                + " was created.");
+
+        try {
+            userService.createUser(userRequestCreateDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User " + userRequestCreateDTO.getLogin()
+                    + " was created.");
+        } catch (Exception e) {
+            System.err.println("Error checking user login: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.userService.findByIdDto(id));
+
+        try {
+            return ResponseEntity.ok(this.userService.findByIdDto(id));
+        } catch (Exception e) {
+            System.err.println("Error checking user ID: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
     }
 
 
@@ -43,15 +58,30 @@ public class UserController {
 
 
     @PutMapping
-    public ResponseEntity<Void> updateUser(@RequestBody UserRequestUpdateDTO userRequestUpdateDTO) {
-        userService.updateUser(userRequestUpdateDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<String> updateUser(@RequestBody UserRequestUpdateDTO userRequestUpdateDTO) {
+
+        try {
+            userService.updateUser(userRequestUpdateDTO);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            System.err.println("Error checking user ID: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(e.getMessage());
+        }
 
     }
 
     @DeleteMapping("/{login}")
     public ResponseEntity<String> deleteUser(@PathVariable("login") String login) {
-        this.userService.deleteUser(login);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("User " + login + " has been deleted.");
+
+        try {
+            this.userService.deleteUser(login);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("User " + login + " has been deleted.");
+        } catch (Exception e) {
+            System.err.println("Error checking User: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                    body(e.getMessage());
+        }
+
     }
 }
