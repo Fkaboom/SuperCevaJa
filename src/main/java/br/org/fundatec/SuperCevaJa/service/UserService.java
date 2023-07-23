@@ -25,6 +25,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     *
+     * @param userRequestCreateDTO
+     * @see br.org.fundatec.SuperCevaJa.controller.UserController
+     * @throws HttpStatus.BAD_REQUEST caso usuario já exista
+     * Recebe corpo e cria usuario
+     */
     public void createUser(UserRequestCreateDTO userRequestCreateDTO) {
         UserModel userModel = convertToModel(userRequestCreateDTO);
         Optional<UserModel> existingUser = Optional.ofNullable(userRepository.findByLogin(userModel.getLogin()));
@@ -39,6 +46,11 @@ public class UserService {
         userRepository.save(userModel);
     }
 
+    /**
+     * @see br.org.fundatec.SuperCevaJa.controller.UserController
+     * @return activeUser
+     * Retorna todos os usuarios ativos
+     */
     public List<UserDTO> findAll() {
         List<UserModel> userModel = userRepository.findAll();
 
@@ -49,6 +61,12 @@ public class UserService {
         return activeUser;
     }
 
+    /**
+     *
+     * @param userRequestUpdateDTO
+     * @see br.org.fundatec.SuperCevaJa.controller.UserController
+     * Atualiza campo Nome e Sobrenome de usuario
+     */
     public void updateUser(UserRequestUpdateDTO userRequestUpdateDTO) {
         Long userId = userRequestUpdateDTO.getId();
 
@@ -63,6 +81,12 @@ public class UserService {
 
     }
 
+    /**
+     *
+     * @param login
+     * @see br.org.fundatec.SuperCevaJa.controller.UserController
+     * Procura usuario por login e deleta ele
+     */
     public void deleteUser(String login) {
 
         Optional<UserModel> existingUser = Optional.ofNullable(getUserByLogin(login));
@@ -79,6 +103,13 @@ public class UserService {
 
     }
 
+    /**
+     *
+     * @param login
+     * @see br.org.fundatec.SuperCevaJa.controller.UserController
+     * @return existingUser
+     * Busca usuario existente a partir de Login
+     */
     public UserModel getUserByLogin(String login) {
         Optional<UserModel> existingUser = Optional.ofNullable(userRepository.findByLogin(login));
 
@@ -91,6 +122,13 @@ public class UserService {
         return existingUser.get();
     }
 
+    /**
+     *
+     * @param id
+     * @return userDTO
+     * @throws HttpStatus.NOT_FOUND se usuario não existir
+     * Busca usuarioDTO por id
+     */
     public UserDTO findByIdDto(Long id) {
         Optional<UserModel> userModel = userRepository.findById(id);
 
@@ -105,7 +143,13 @@ public class UserService {
         return userDto;
 
     }
-
+    /**
+     *
+     * @param id
+     * @return userModel
+     * @throws HttpStatus.NOT_FOUND se usuario não existir
+     * Busca usuarioModel por id
+     */
     public UserModel findByIdModel(Long id) {
         Optional<UserModel> userModel = userRepository.findById(id);
 
@@ -121,8 +165,14 @@ public class UserService {
 
     }
 
+    /**
+     *
+     * @param userRequestCreateDTO
+     * @see UserModel
+     * @return userModel
+     * Converte UserDTO para userModel
+     */
     private UserModel convertToModel(UserRequestCreateDTO userRequestCreateDTO) {
-
 
         UserModel userModel = new UserModel();
         userModel.setName(userRequestCreateDTO.getName());
@@ -139,6 +189,13 @@ public class UserService {
         return userModel;
     }
 
+    /**
+     *
+     * @param userModel
+     * @see UserDTO
+     * @return userDTO
+     * Converte UserModel para UserDTO
+     */
     private UserDTO convertToDTO(UserModel userModel) {
         UserDTO userDto = new UserDTO();
         userDto.setName(userModel.getName());

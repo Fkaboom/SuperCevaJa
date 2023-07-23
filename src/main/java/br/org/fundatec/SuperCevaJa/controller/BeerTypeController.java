@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Felipe Brandão e João Gabriel C. da Cruz
+ * Controller responsavel para lidar com as operações ligadas com cervejas
+ */
+
 @RestController
 @RequestMapping("/cevaja/api/v1/beer/types")
 @CrossOrigin(origins = "*")
@@ -21,6 +26,15 @@ public class BeerTypeController {
         this.beerTypeService = beerTypeService;
     }
 
+    /***
+     *
+     * @param beerTypeDTO
+     * @see BeerTypeDTO
+     * @return beerTypeService.createBeerType
+     * @throws HttpStatus.CREATED se funcionar
+     * @throws HttpStatus.BAD_REQUEST se cerveja já existir ou tiver erro
+     * Recebe corpo e cria cerveja
+     */
     @PostMapping
     public ResponseEntity<String> createBeerType(@RequestBody BeerTypeDTO beerTypeDTO) {
         try {
@@ -35,12 +49,24 @@ public class BeerTypeController {
 
     }
 
+    /**
+     @return beerTypeService.beer
+     Retorna lista de cerveja*/
     @GetMapping
     public ResponseEntity<List<BeerTypeDTO>> findAll() {
         return ResponseEntity.ok(this.beerTypeService.findAll());
     }
 
 
+    /**
+     * @param beerTypeRequestUpdateDTO
+     * @see BeerTypeRequestUpdateDTO
+     * @return beerTypeService.updateBeerType
+     * @throws HttpStatus.NO_CONTENT se tiver cerveja
+     * @throws HttpStatus.BAD_REQUEST se não tiver
+
+     * Recebe o corpo e atualiza cerveja
+     */
     @PutMapping
     public ResponseEntity<String> updateBeerType(@RequestBody BeerTypeRequestUpdateDTO beerTypeRequestUpdateDTO) {
 
@@ -55,6 +81,9 @@ public class BeerTypeController {
 
     }
 
+    /**
+     * @param name
+     Método que recebe nome de cerveja e deleta ela*/
     @DeleteMapping("/{name}")
     public ResponseEntity<String> deleteBeerType(@PathVariable("name") String name) {
         try {

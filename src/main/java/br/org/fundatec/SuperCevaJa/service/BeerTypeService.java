@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Felipe Brandão e João Gabriel C. da Cruz
+ */
 @Service
 public class BeerTypeService {
     private BeerTypeRepository beerTypeRepository;
@@ -22,6 +25,12 @@ public class BeerTypeService {
         this.beerTypeRepository = beerTypeRepository;
     }
 
+    /**
+     *
+     * @param beerTypeDTO
+     * @see br.org.fundatec.SuperCevaJa.controller.BeerTypeController
+     * Recebe o corpo e cria Cerveja
+     */
     public void createBeerType(BeerTypeDTO beerTypeDTO) {
         BeerTypeModel beerTypeModel = convertToModel(beerTypeDTO);
         Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(beerTypeModel.getName()));
@@ -36,6 +45,12 @@ public class BeerTypeService {
         beerTypeRepository.save(beerTypeModel);
     }
 
+    /**
+     * @see br.org.fundatec.SuperCevaJa.controller.BeerTypeController
+     * @return activeBeerType
+     * Retorna todas as cervejas ativas
+     *
+     */
     public List<BeerTypeDTO> findAll() {
         List<BeerTypeModel> beerTypeModel = beerTypeRepository.findAll();
 
@@ -46,6 +61,14 @@ public class BeerTypeService {
         return activeBeerType;
     }
 
+    /**
+     *
+     * @param name
+     * @return existingBeerType
+     * @see br.org.fundatec.SuperCevaJa.controller.BeerTypeController
+     * @throws HttpStatus.BAD_REQUEST se cerveja não existir
+     * busca cerveja por nome e retorna
+     */
     public BeerTypeModel findByName(String name) {
         Optional<BeerTypeModel> existingBeerType = Optional.ofNullable(beerTypeRepository.findByName(name));
 
@@ -59,6 +82,14 @@ public class BeerTypeService {
 
     }
 
+    /**
+     *
+     * @param id
+     * @return beerTypeModel
+     * @see br.org.fundatec.SuperCevaJa.controller.BeerTypeController
+     * @throws HttpStatus.NOT_FOUND se cerveja não for encontrada
+     * Busca cerveja por id e retorna cerveja
+     */
     public BeerTypeModel findByIdModel(Long id) {
         Optional<BeerTypeModel> beerTypeModel = beerTypeRepository.findById(id);
 
@@ -98,6 +129,13 @@ public class BeerTypeService {
 
     }
 
+    /**
+     *
+     * @param beerTypeDTO
+     * @see BeerTypeDTO
+     * @return beerTypeModel
+     * converte CervejaDTO para CervejaModel
+     */
     private BeerTypeModel convertToModel(BeerTypeDTO beerTypeDTO) {
         BeerTypeModel beerTypeModel = new BeerTypeModel();
         beerTypeModel.setName(beerTypeDTO.getName());
@@ -106,6 +144,13 @@ public class BeerTypeService {
         return beerTypeModel;
     }
 
+    /**
+     *
+     * @param beerTypeModel
+     * @see BeerTypeModel
+     * @return beerTypeDTO
+     * Converte Cerveja Model recebida para Cerveja DTO
+     */
     private BeerTypeDTO convertToDTO(BeerTypeModel beerTypeModel) {
         BeerTypeDTO beerTypeDTO = new BeerTypeDTO();
         beerTypeDTO.setName(beerTypeModel.getName());

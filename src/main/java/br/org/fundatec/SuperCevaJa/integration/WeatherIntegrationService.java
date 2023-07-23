@@ -7,7 +7,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 
-
+/**
+ * @author Felipe Brandão e João Gabriel c. da Cruz
+ */
 @Service
 public class WeatherIntegrationService {
 
@@ -20,6 +22,11 @@ public class WeatherIntegrationService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
+    /**
+     *
+     * @return temp em double
+     * Busca pela cidade na API e retorna a temperatura em graus
+     */
     public WeatherResponse findCity() {
         String urlComplete = this.uri;
         WeatherResponse weatherResponse = this.restTemplate.getForObject(urlComplete, WeatherResponse.class);
@@ -28,7 +35,11 @@ public class WeatherIntegrationService {
     }
 
 
-
+    /**
+     *
+     * @param weatherResponse
+     * @return temp em double
+     */
     public double returnTemp(WeatherResponse weatherResponse){
         double temp = weatherResponse.getTemp_c();
         return temp;

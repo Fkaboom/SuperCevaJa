@@ -28,6 +28,14 @@ public class OrderService {
         this.weatherIntegrationService = weatherIntegrationService;
     }
 
+    /**
+     *
+     * @param orderDTO
+     * @return ResponseEntity.ok
+     * @see br.org.fundatec.SuperCevaJa.controller.OrderController
+     * @throws HttpStatus.Bad_REQUEST se cerveja ou pedido não existir
+     * Ve se usuario é maior de idade, após isso calcula preco
+     */
     public ResponseEntity<String> addOrder(OrderDTO orderDTO) {
         OrderModel orderModel = convertToModel(orderDTO);
         try {
@@ -51,6 +59,12 @@ public class OrderService {
 
     }
 
+    /**
+     *
+     * @param orderModel
+     * @throws HttpStatus.BAD_REQUEST se usuario for menor de idade
+     * vê se usuario é maior de idade
+     */
     private void underageUser(OrderModel orderModel) {
         UserModel userModel = userService.getUserByLogin(orderModel.getUserLogin());
 
@@ -64,6 +78,12 @@ public class OrderService {
         }
     }
 
+    /**
+     *
+     * @param orderModel
+     * @return finalprice
+     * Pega o valor total da compra e calcula desconto se temperatura for menor de  20° ou se itens forem maior que 10 unidades
+     */
     private BigDecimal applyDiscounts(OrderModel orderModel) {
 
         BigDecimal totalPrice = calculateTotalPrice(orderModel);
@@ -93,6 +113,12 @@ public class OrderService {
 
     }
 
+    /**
+     *
+     * @param beersOrder
+     * @return quantityItems
+     * Calcula quantos produtos estão na lista de pedidos
+     */
     private int calculateQuantityItems(List<BeerModel> beersOrder) {
         int quantityItems = beersOrder.stream()
                 .map(beerModel -> beerModel.getQuantity().intValue())
@@ -100,6 +126,11 @@ public class OrderService {
         return quantityItems;
     }
 
+    /**
+     * @param orderModel
+     * @return totalPrice
+     * Pega a soma de produtos e calcula o preço total
+     */
     private BigDecimal calculateTotalPrice(OrderModel orderModel) {
         List<BeerModel> beersOrder = orderModel.getBeersOrder();
 
@@ -117,6 +148,12 @@ public class OrderService {
 
     }
 
+    /**
+     * @param orderDTO
+     * @see OrderModel
+     * @return orderModel
+     * Pegar pedidoDTO e converte para PedidoModel
+     */
     private OrderModel convertToModel(OrderDTO orderDTO) {
         OrderModel orderModel = new OrderModel();
 
